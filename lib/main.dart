@@ -1,121 +1,306 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'F2_241A010179', // TODO: Thay bằng MSSV của bạn
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0468D7)),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _LoginPageState extends State<LoginPage> {
+  bool _ghiNho = false;
+  bool _anMatKhau = true;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const HeaderBanner(),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final manHinhRong = constraints.maxWidth >= 700;
+                    if (!manHinhRong) {
+                      return Column(
+                        children: [
+                          _buildForm(context),
+                          const SizedBox(height: 24),
+                          const ProfileCard(),
+                        ],
+                      );
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(flex: 3, child: _buildForm(context)),
+                        const SizedBox(width: 24),
+                        const Expanded(flex: 2, child: ProfileCard()),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Đăng nhập hệ thống',
+          style: textTheme.headlineSmall,
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Nhập MSSV và mật khẩu để tiếp tục',
+          style: textTheme.bodyMedium?.copyWith(color: scheme.outline),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 20),
+        const TextField(
+          decoration: InputDecoration(
+            labelText: 'Mã số sinh viên',
+            prefixIcon: Icon(Icons.badge_outlined),
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          obscureText: _anMatKhau,
+          decoration: InputDecoration(
+            labelText: 'Mật khẩu',
+            prefixIcon: const Icon(Icons.lock_outline),
+            suffixIcon: IconButton(
+              icon: Icon(_anMatKhau ? Icons.visibility_off : Icons.visibility),
+              onPressed: () => setState(() => _anMatKhau = !_anMatKhau),
+            ),
+          ),
+        ),
+        Row(
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Checkbox(
+              value: _ghiNho,
+              onChanged: (v) => setState(() => _ghiNho = v ?? false),
+            ),
+            const Text('Ghi nhớ đăng nhập'),
+            const Spacer(),
+            TextButton(onPressed: () {}, child: const Text('Quên mật khẩu?')),
+          ],
+        ),
+        const SizedBox(height: 8),
+        FilledButton(
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Đăng nhập (mô phỏng) thành công')),
+            );
+          },
+          child: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 12),
+            child: Text('ĐĂNG NHẬP'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            const Expanded(child: Divider()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('hoặc', style: TextStyle(color: scheme.outline)),
+            ),
+            const Expanded(child: Divider()),
+          ],
+        ),
+        const SizedBox(height: 16),
+        OutlinedButton.icon(
+          onPressed: () {},
+          icon: const Icon(Icons.school_outlined),
+          label: const Text('Đăng nhập bằng tài khoản trường'),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Chưa có tài khoản?'),
+            TextButton(onPressed: () {}, child: const Text('Đăng ký')),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class HeaderBanner extends StatelessWidget {
+  const HeaderBanner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return SizedBox(
+      height: 196,
+      child: Stack(
+        children: [
+          Container(
+            height: 150,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [scheme.primary, scheme.tertiary],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+            ),
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'INT4211 – LẬP TRÌNH DI ĐỘNG',
+                  style: TextStyle(color: scheme.onPrimary, fontSize: 12, letterSpacing: 1.5),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Cổng thực hành LTDD',
+                  style: TextStyle(
+                    color: scheme.onPrimary,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Center(
+              child: CircleAvatar(
+                radius: 46,
+                backgroundColor: scheme.surface,
+                child: CircleAvatar(
+                  radius: 42,
+                  backgroundColor: scheme.primaryContainer,
+                  child: Text(
+                    'LT',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: scheme.onPrimaryContainer,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  const ProfileCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const ListTile(
+              leading: CircleAvatar(child: Text('A')),
+              title: Text('Trần Nguyễn Thanh Lộc'), // TODO: Thay bằng Tên của bạn
+              subtitle: Text('MSSV: 241A010179'), // TODO: Thay bằng MSSV
+            ),
+            const Divider(height: 1),
+            const ListTile(
+              leading: Icon(Icons.class_outlined),
+              title: Text('Lớp'),
+              subtitle: Text('CNTT – LTDD'),
+            ),
+            const ListTile(
+              leading: Icon(Icons.mail_outline),
+              title: Text('Email'),
+              subtitle: Text('Loc241A010179@vhu.edu.vn'), // TODO: Thay bằng Email
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Row(
+                children: const [
+                  Expanded(child: _StatBox(label: 'Lab đã nộp', value: '1')),
+                  SizedBox(width: 12),
+                  Expanded(child: _StatBox(label: 'Điểm TB lab', value: '8.5')),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+}
+
+class _StatBox extends StatelessWidget {
+  const _StatBox({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: scheme.primary),
+          ),
+          Text(label, style: TextStyle(fontSize: 12, color: scheme.outline)),
+        ],
       ),
     );
   }
