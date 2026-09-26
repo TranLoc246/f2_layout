@@ -1,17 +1,22 @@
-# f2_layout
+#Dự án Flutter: F2 Layout
+#Môn học: INT4211 – Lập trình thiết bị di động
+Họ Tên : Trần Nguyễn Thanh Lộc
+Mssv: 241A010179
+#Dự án thực hành xây dựng giao diện đăng nhập bằng Flutter
+---
+Bài Nâng Cao 1 (NC1): Chế độ Sáng/Tối
+Thiết lập nút chỉnh nền sáng tối ở trên ảnh bìa giao diện
 
-A new Flutter project.
+Bài Nâng Cao 2: Tùy Chỉnh Ảnh Đại Diện & Ảnh Bìa
 
-## Getting Started
+Cập nhật Avatar cá nhân bằng hình ảnh trực tuyến qua NetworkImage.
+Thêm ảnh bìa trực tuyến
 
-This project is a starting point for a Flutter application.
+Lịch Sử Commits
+---
+feat: khoi tao project Flutter f2_layout - Khởi tạo cấu trúc dự án ban đầu.
 
-A few resources to get you started if this is your first Flutter project:
+Giao dien dang nhap va card sinh vien theo file F2 - Hoàn thiện layout cơ bản theo tài liệu F2.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Them che do toi darkTheme va nut chuyen sang/toi tren anh bia - Bài nâng cao 1: thêm chế độ sáng tối
+thay doi avata va anh nen - Nâng cao 3: thay đổi ảnh avata và ảnh bìa
