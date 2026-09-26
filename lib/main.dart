@@ -2,27 +2,69 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // Biến quản lý trạng thái Sáng (light) / Tối (dark)
+  ThemeMode _themeMode = ThemeMode.light;
+
+  // Hàm chuyển đổi theme
+  void _toggleTheme() {
+    setState(() {
+      _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    const seedColor = Color(0xFF0468D7);
+
     return MaterialApp(
       title: 'F2_241A010179', // TODO: Thay bằng MSSV của bạn
       debugShowCheckedModeBanner: false,
+      // Cấu hình Theme Sáng
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0468D7)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.light,
+        ),
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),
         ),
       ),
-      home: const LoginPage(),
+      // Cấu hình Theme Tối (NC1)
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.dark,
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(),
+        ),
+      ),
+      themeMode: _themeMode,
+      home: LoginPage(
+        onToggleTheme: _toggleTheme,
+        isDarkMode: _themeMode == ThemeMode.dark,
+      ),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({
+    super.key,
+    required this.onToggleTheme,
+    required this.isDarkMode,
+  });
+
+  final VoidCallback onToggleTheme;
+  final bool isDarkMode;
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -39,7 +81,11 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const HeaderBanner(),
+              // Banner đầu trang chứa nút chuyển Theme
+              HeaderBanner(
+                onToggleTheme: widget.onToggleTheme,
+                isDarkMode: widget.isDarkMode,
+              ),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -164,8 +210,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+/// Header Banner có nút bấm chuyển Sáng / Tối (NC1)
 class HeaderBanner extends StatelessWidget {
-  const HeaderBanner({super.key});
+  const HeaderBanner({
+    super.key,
+    required this.onToggleTheme,
+    required this.isDarkMode,
+  });
+
+  final VoidCallback onToggleTheme;
+  final bool isDarkMode;
 
   @override
   Widget build(BuildContext context) {
@@ -186,21 +240,40 @@ class HeaderBanner extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
             ),
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'INT4211 – LẬP TRÌNH DI ĐỘNG',
-                  style: TextStyle(color: scheme.onPrimary, fontSize: 12, letterSpacing: 1.5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'INT4211 – LẬP TRÌNH DI ĐỘNG',
+                      style: TextStyle(
+                        color: scheme.onPrimary,
+                        fontSize: 12,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Cổng thực hành LTDD',
+                      style: TextStyle(
+                        color: scheme.onPrimary,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Cổng thực hành LTDD',
-                  style: TextStyle(
+                // Nút IconButton chuyển chế độ Tối / Sáng
+                IconButton(
+                  onPressed: onToggleTheme,
+                  icon: Icon(
+                    isDarkMode ? Icons.light_mode : Icons.dark_mode,
                     color: scheme.onPrimary,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
                   ),
+                  tooltip: isDarkMode ? 'Chuyển Chế độ Sáng' : 'Chuyển Chế độ Tối',
                 ),
               ],
             ),
@@ -234,6 +307,7 @@ class HeaderBanner extends StatelessWidget {
   }
 }
 
+/// Thẻ Hồ Sơ Sinh Viên
 class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key});
 
@@ -247,8 +321,8 @@ class ProfileCard extends StatelessWidget {
           children: [
             const ListTile(
               leading: CircleAvatar(child: Text('A')),
-              title: Text('Trần Nguyễn Thanh Lộc'), // TODO: Thay bằng Tên của bạn
-              subtitle: Text('MSSV: 241A010179'), // TODO: Thay bằng MSSV
+              title: Text('Trần Nguyễn Thanh Lộc'), // TODO: Đổi thành tên của bạn
+              subtitle: Text('MSSV: 241A010179'), // TODO: Đổi thành MSSV của bạn
             ),
             const Divider(height: 1),
             const ListTile(
@@ -259,7 +333,7 @@ class ProfileCard extends StatelessWidget {
             const ListTile(
               leading: Icon(Icons.mail_outline),
               title: Text('Email'),
-              subtitle: Text('Loc241A010179@vhu.edu.vn'), // TODO: Thay bằng Email
+              subtitle: Text('Loc241A010179@vhu.edu.vn'),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
@@ -297,9 +371,16 @@ class _StatBox extends StatelessWidget {
         children: [
           Text(
             value,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: scheme.primary),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: scheme.primary,
+            ),
           ),
-          Text(label, style: TextStyle(fontSize: 12, color: scheme.outline)),
+          Text(
+            label,
+            style: TextStyle(fontSize: 12, color: scheme.outline),
+          ),
         ],
       ),
     );
