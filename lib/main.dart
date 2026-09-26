@@ -226,18 +226,24 @@ class HeaderBanner extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return SizedBox(
-      height: 196,
+      height:256,
       child: Stack(
         children: [
           Container(
-            height: 150,
+            height: 230,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [scheme.primary, scheme.tertiary],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+              // THÊM CẤU HÌNH ẢNH BÌA TẠI ĐÂY
+              image: DecorationImage(
+                image: const NetworkImage(
+                  'https://cdn2.fptshop.com.vn/unsafe/hinh_nen_hai_huoc_0_142e94aaf1.jpg', // Link ảnh bìa 
+                ),
+                fit: BoxFit.cover, // Giúp ảnh tự căn vừa khung
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.35), // Phủ màu tối nhẹ giúp chữ dễ đọc hơn
+                  BlendMode.darken,
+                ),
+              ),
             ),
             padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
             child: Row(
@@ -266,7 +272,6 @@ class HeaderBanner extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Nút IconButton chuyển chế độ Tối / Sáng
                 IconButton(
                   onPressed: onToggleTheme,
                   icon: Icon(
@@ -288,14 +293,8 @@ class HeaderBanner extends StatelessWidget {
                 backgroundColor: scheme.surface,
                 child: CircleAvatar(
                   radius: 42,
-                  backgroundColor: scheme.primaryContainer,
-                  child: Text(
-                    'LT',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: scheme.onPrimaryContainer,
-                    ),
+                  backgroundImage: const NetworkImage(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOsqAWZ_j--WZIYNpFaa9wXYrKrpKmmhDRUZkINO8WcnFgVHMe5rpwIExe&s=10',
                   ),
                 ),
               ),
